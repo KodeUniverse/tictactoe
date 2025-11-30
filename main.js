@@ -35,7 +35,7 @@ class Board {
     
     checkWin() {
         // check row-wise
-        this.grid.forEach((row) => {
+        for (const row of this.grid) {
             let xCount = 0, oCount = 0;
             row.forEach((elem) => {
 
@@ -50,7 +50,7 @@ class Board {
             console.log(`xCount = ${xCount}, oCount = ${oCount}, nSize = ${this.nSize}`);
             if (xCount == this.nSize || oCount == this.nSize)
                 return true;
-        });
+        };
         console.log('Row-wise pass completed!');
         // check column-wise
         for (let i = 0; i < this.nSize; i++) {
@@ -151,15 +151,16 @@ class Board {
 
 
 function main() {
-    const board = new Board(3);
-    board.placeMarker('x', {x: 1, y: 2});
-    console.log(`Board after placing X at [1,2]:\n${board}`);
+    const board = new Board(4);
+    board.placeMarker('x', {x: 1, y: 3});
+    console.log(`Board after placing X at [1,3]:\n${board}`);
     console.log(board.checkWin());
 
     console.log("Now placing markers for O to win, and checking win condition.");
-    board.placeMarker('o', {x: 0, y: 0});
-    board.placeMarker('o', {x: 0, y: 1});
-    board.placeMarker('o', {x: 0, y: 2});
+    board.placeMarker('o', {x: 0, y: 3});
+    board.placeMarker('o', {x: 1, y: 2});
+    board.placeMarker('o', {x: 2, y: 1});
+    board.placeMarker('o', {x: 3, y: 0});
     console.log(`Winning board ${board}`);
     console.log(board.checkWin());
 
