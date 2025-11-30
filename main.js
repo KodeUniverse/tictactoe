@@ -20,9 +20,6 @@ class Board {
          **/
 
         if (Object.keys(location).length < 2 || !'x' in location || !'y' in location) {
-
-            console.log(Object.keys(location).length);
-            console.log(location);
             throw new TypeError("Incorrect location specification. Must pass location param as {x: number, y: number}");
         }
 
@@ -32,9 +29,9 @@ class Board {
             throw new TypeError("Incorrect type param specification. Must specify either 'x' or 'o'.");
         }
     } 
-    
-    checkWin() {
-        // check row-wise
+
+    checkRowsForWin() {
+
         for (const row of this.grid) {
             let xCount = 0, oCount = 0;
             row.forEach((elem) => {
@@ -47,12 +44,13 @@ class Board {
                 else if (elem.toUpperCase() === 'O')
                     oCount++;
             });
-            console.log(`xCount = ${xCount}, oCount = ${oCount}, nSize = ${this.nSize}`);
             if (xCount == this.nSize || oCount == this.nSize)
                 return true;
         };
-        console.log('Row-wise pass completed!');
-        // check column-wise
+        return false;
+    }
+    
+    checkColsForWin() {
         for (let i = 0; i < this.nSize; i++) {
             let xCount = 0, oCount = 0;
             for (let j = 0; j < this.nSize; j++) {
@@ -64,13 +62,13 @@ class Board {
                     else if (curr.toUpperCase() === 'O')
                         oCount++;
             }
-
-            console.log(`xCount = ${xCount}, oCount = ${oCount}, nSize = ${this.nSize}`);
             if (xCount === this.nSize || oCount === this.nSize)
                 return true;
         }
+        return false;
+    }
 
-        console.log('Column-wise pass completed!');
+    checkDiagonalForWin() {
         // check diagonals in two passes
         // (top-down left-to-right)
         let i = 0, j = 0;
@@ -87,13 +85,10 @@ class Board {
                 xCount++;
             else if (curr.toUpperCase() === "O")
                 oCount++;
-            console.log(`i = ${i}, j = ${j}`);
             i++;
             j++;
         }
 
-        console.log('First diagonal pass completed!');
-        console.log(`xCount = ${xCount}, oCount = ${oCount}, nSize = ${this.nSize}`);
         if (xCount === this.nSize || oCount === this.nSize)
             return true;
 
@@ -113,17 +108,20 @@ class Board {
                 xCount++;
             else if (curr === 'O')
                 oCount++;
-            console.log(`i = ${i}, j = ${j}`);
             i++;
             j--;
         }
-        
-        console.log('Second diagonal pass completed!');
-        console.log(`xCount = ${xCount}, oCount = ${oCount}, nSize = ${this.nSize}`);
         if (xCount === this.nSize || oCount === this.nSize)
             return true;
-        
         return false;
+    }
+
+    checkWin() {
+
+        if (this.checkRowsForWin() || this.checkColsForWin() || this.checkDiagonalForWin())
+            return true;
+        else
+            return false;
     }
 
     clearBoard() {
@@ -161,7 +159,7 @@ function main() {
     board.placeMarker('o', {x: 1, y: 2});
     board.placeMarker('o', {x: 2, y: 1});
     board.placeMarker('o', {x: 3, y: 0});
-    console.log(`Winning board ${board}`);
+    console.log(`Winning board:\n${board}`);
     console.log(board.checkWin());
 
 }
