@@ -44,8 +44,14 @@ class Board {
                 else if (elem.toUpperCase() === 'O')
                     oCount++;
             });
-            if (xCount == this.nSize || oCount == this.nSize)
-                return true;
+
+            const xWin = (xCount === this.nSize);
+            const oWin = (oCount === this.nSize);
+
+            if (xWin)
+                return "X";
+            else if (oWin) 
+                return "O";
         };
         return false;
     }
@@ -62,8 +68,13 @@ class Board {
                     else if (curr.toUpperCase() === 'O')
                         oCount++;
             }
-            if (xCount === this.nSize || oCount === this.nSize)
-                return true;
+            const xWin = (xCount === this.nSize);
+            const oWin = (oCount === this.nSize);
+
+            if (xWin)
+                return "X";
+            else if (oWin) 
+                return "O";
         }
         return false;
     }
@@ -89,8 +100,13 @@ class Board {
             j++;
         }
 
-        if (xCount === this.nSize || oCount === this.nSize)
-            return true;
+        let xWin = (xCount === this.nSize);
+        let oWin = (oCount === this.nSize);
+
+        if (xWin)
+            return "X";
+        else if (oWin) 
+            return "O";
 
         // (top-down right-to-left)
         i = 0;
@@ -111,17 +127,32 @@ class Board {
             i++;
             j--;
         }
-        if (xCount === this.nSize || oCount === this.nSize)
-            return true;
+
+        xWin = (xCount === this.nSize);
+        oWin = (oCount === this.nSize);
+
+        if (xWin)
+            return "X";
+        else if (oWin) 
+            return "O";
+
         return false;
     }
 
     checkWin() {
 
-        if (this.checkRowsForWin() || this.checkColsForWin() || this.checkDiagonalForWin())
-            return true;
-        else
-            return false;
+        const players = ["X", "O"];
+        
+
+        for (const player of players) {
+            
+            if (this.checkRowsForWin() === player || this.checkColsForWin() === player || this.checkDiagonalForWin() === player) {
+                console.log(`${player} is the winner!`);
+                return true
+            }
+        }   
+
+        return false;
     }
 
     clearBoard() {
@@ -159,9 +190,18 @@ function main() {
     board.placeMarker('o', {x: 1, y: 2});
     board.placeMarker('o', {x: 2, y: 1});
     board.placeMarker('o', {x: 3, y: 0});
-    console.log(`Winning board:\n${board}`);
+    console.log(`Board:\n${board}`);
     console.log(board.checkWin());
 
+
+    console.log("Now clearing board, and placing markers for X to win, and checking win condition.");
+    board.clearBoard();
+    board.placeMarker('x', {x: 1, y: 0});
+    board.placeMarker('x', {x: 1, y: 1});
+    board.placeMarker('x', {x: 1, y: 2});
+    board.placeMarker('x', {x: 1, y: 3});
+    console.log(`Board:\n${board}`);
+    console.log(board.checkWin());
 }
 
 main();
